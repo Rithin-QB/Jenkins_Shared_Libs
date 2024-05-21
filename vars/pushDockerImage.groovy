@@ -1,4 +1,5 @@
 def call(String imageName, String imageTag, String dockerRepoUrl) {
-    sh "docker tag ${imageName}:${imageTag} ${dockerRepoUrl}:${imageTag}"
-    sh "docker push ${dockerRepoUrl}:${imageTag}"
+    def image = "${dockerRepoUrl}/${imageName}:${imageTag}"
+    sh "docker tag ${imageName}:${imageTag} ${image}"
+    sh "docker push ${image}"
 }
