@@ -1,6 +1,6 @@
 # Jenkins Shared Library - Vars
 
-This directory contains reusable Groovy scripts for Jenkins pipelines. These scripts can be used to perform common tasks such as building code, building Docker images, checking out Git repositories, and pushing Docker images.
+This directory contains reusable Groovy scripts for Jenkins pipelines. These scripts can be used to perform common tasks such as checking out Git repositories, building code, building Docker images and pushing Docker images.
 
 ## Scripts
 
