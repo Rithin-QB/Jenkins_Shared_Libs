@@ -73,7 +73,7 @@ pushDockerImage('sample', 'latest', 'username/repo')
 ```
 
 ##### Example Jenkins Pipeline
-Here is an example of how to use these scripts in a Jenkins pipeline:
+Here is an example of how to use these scripts in a Jenkins pipeline where I used a public repo which contains a Spring Boot based Java web application:
 
 ```groovy
 @Library('my-shared-library') _
@@ -131,8 +131,7 @@ Navigate to Credentials > System > Global credentials.
 Add new credentials with your Docker Hub username and password.
 Use these credentials in your pipeline to login to Docker Hub before pushing the image:
 
-```vbnet
 
-This `README.md` provides detailed explanations and usage examples for each Groovy script in your shared library, making it easier for others to understand how to use them effectively.
-```
+#### This `README.md` provides detailed explanations and usage examples for each Groovy script in your shared library, making it easier for others to understand how to use them effectively.
+
 
