@@ -11,7 +11,7 @@ This script checks out a Git repository from a specified URL and branch.
 ```groovy
 checkoutGitRepo(String repoUrl, String branch = 'main')
 ```
-##### Parameters
+#### Parameters
 `repoUrl`: The URL of the Git repository.
 `branch`: The branch to checkout (default is main).
 
@@ -28,7 +28,7 @@ This script is used to build code using a specified build command.
 ```groovy
 buildCode(String buildCommand)
 ```
-##### Parameters
+#### Parameters
 `buildCommand`: The command to build the code (e.g., mvn clean install, npm install).
 
 Example
@@ -43,7 +43,7 @@ This script builds a Docker image using a specified Dockerfile path, image name,
 ```groovy
 buildDockerImage(String dockerfilePath, String imageName, String imageTag)
 ```
-##### Parameters
+#### Parameters
 `dockerfilePath`: The path to the Dockerfile.
 `imageName`: The name of the Docker image.
 `imageTag`: The tag for the Docker image.
@@ -61,7 +61,7 @@ This script tags and pushes a Docker image to a specified Docker repository URL.
 ```groovy
 pushDockerImage(String imageName, String imageTag, String dockerRepoUrl)
 ```
-##### Parameters
+#### Parameters
 `imageName`: The name of the Docker image.
 `imageTag`: The tag of the Docker image.
 `dockerRepoUrl`: The URL of the Docker repository.
@@ -72,7 +72,7 @@ Example
 pushDockerImage('sample', 'latest', 'username/repo')
 ```
 
-###### Example Jenkins Pipeline
+##### Example Jenkins Pipeline
 Here is an example of how to use these scripts in a Jenkins pipeline:
 
 ```groovy
@@ -115,15 +115,15 @@ pipeline {
 }
 ```
 
-###### Common Issues
-## Docker Permission Denied
+### Common Issues
+#### Docker Permission Denied
 If you encounter a permission denied error while trying to connect to the Docker daemon, ensure that the Jenkins user has the appropriate permissions. You may need to add the Jenkins user to the docker group:
 
 ```sh
 sudo usermod -aG docker jenkins
 ```
 
-## Docker Hub Authentication
+#### Docker Hub Authentication
 If you receive a denied: requested access to the resource is denied error when pushing a Docker image, ensure that your Jenkins instance is properly authenticated with Docker Hub. This can be done by configuring Docker credentials in Jenkins:
 
 Go to Jenkins Dashboard.
