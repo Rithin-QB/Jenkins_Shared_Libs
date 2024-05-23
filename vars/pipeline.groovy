@@ -49,7 +49,7 @@ def checkoutGitRepo(String repoUrl, String branch) {
 }
 
 def buildCode(String buildCommand) {
-    sh buildCommand
+    sh "${buildCommand}"
 }
 
 def buildDockerImage(String dockerfile, String imageName, String imageTag) {
