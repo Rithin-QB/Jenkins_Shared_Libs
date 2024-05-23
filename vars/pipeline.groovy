@@ -1,5 +1,3 @@
-// vars/pipeline.groovy
-
 def call(Map config) {
     pipeline {
         agent any
@@ -11,27 +9,35 @@ def call(Map config) {
         stages {
             stage('Checkout') {
                 steps {
-                    checkoutGitRepo(config.repoUrl, config.branch)
+                    script {
+                        checkoutGitRepo(config.repoUrl, config.branch)
+                    }
                 }
             }
             stage('Build') {
                 steps {
-                    dir(config.buildDir) {
-                        buildCode(config.buildCommand)
+                    script {
+                        dir(config.buildDir) {
+                            buildCode(config.buildCommand)
+                        }
                     }
                 }
             }
             stage('Build Docker Image') {
                 steps {
-                    dir(config.dockerDir) {
-                        buildDockerImage(config.dockerfile, config.imageName, config.imageTag)
+                    script {
+                        dir(config.dockerDir) {
+                            buildDockerImage(config.dockerfile, config.imageName, config.imageTag)
+                        }
                     }
                 }
             }
             stage('Push Docker Image') {
                 steps {
-                    sh 'echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin'
-                    pushDockerImage(config.imageName, config.imageTag, config.dockerRepoUrl)
+                    script {
+                        sh 'echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin'
+                        pushDockerImage(config.imageName, config.imageTag, config.dockerRepoUrl)
+                    }
                 }
             }
         }
