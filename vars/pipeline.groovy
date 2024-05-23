@@ -1,71 +1,64 @@
 // vars/pipeline.groovy
+
 def call(Map config) {
     pipeline {
         agent any
 
         environment {
-            DOCKER_CREDENTIALS = credentials("${config.dockerCredentialsId ?: 'dockerhub-halkeye'}")
-            DOCKER_REGISTRY = "${config.dockerRepoUrl ?: ''}"
-            IMAGE_NAME = "${config.imageName}"
-            IMAGE_TAG = "${config.imageTag ?: 'latest'}"
-            DOCKERFILE = "${config.dockerfile ?: 'Dockerfile'}"
-        }
-
-        options {
-            disableConcurrentBuilds()
-            buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
-            timeout(time: 60, unit: "MINUTES")
-            ansiColor("xterm")
+            DOCKER_HUB_CREDENTIALS = credentials(config.dockerCredentialsId)
         }
 
         stages {
             stage('Checkout') {
                 steps {
                     script {
-                       checkout([$class: 'GitSCM', branches: [[name: branch]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: repoUrl]]])
+                        checkoutGitRepo(config.repoUrl, config.branch)
                     }
                 }
             }
             stage('Build') {
                 steps {
                     script {
-                        sh(config.buildCommand ?: 'mvn clean install')
+                        dir(config.buildDir) {
+                            buildCode(config.buildCommand)
+                        }
                     }
                 }
             }
             stage('Build Docker Image') {
                 steps {
                     script {
-                        sh """
-                            docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -f ${DOCKERFILE} .
-                        """
+                        dir(config.dockerDir) {
+                            buildDockerImage(config.dockerfile, config.imageName, config.imageTag)
+                        }
                     }
                 }
             }
             stage('Push Docker Image') {
                 steps {
                     script {
-                        withCredentials([usernamePassword(credentialsId: config.dockerCredentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                            sh """
-                                docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-                                docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
-                                docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
-                            """
-                        }
+                        sh 'echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin'
+                        pushDockerImage(config.imageName, config.imageTag, config.dockerRepoUrl)
                     }
                 }
             }
         }
-
-        post {
-            failure {
-                emailext(
-                    attachLog: true,
-                    recipientProviders: [developers()],
-                    body: "Build failed (see ${env.BUILD_URL})",
-                    subject: "[JENKINS] ${env.JOB_NAME} failed"
-                )
-            }
-        }
     }
+}
+
+def checkoutGitRepo(String repoUrl, String branch) {
+    checkout([$class: 'GitSCM', branches: [[name: branch]], userRemoteConfigs: [[url: repoUrl]]])
+}
+
+def buildCode(String buildCommand) {
+    sh buildCommand
+}
+
+def buildDockerImage(String dockerfile, String imageName, String imageTag) {
+    sh "docker build -t ${imageName}:${imageTag} -f ${dockerfile} ."
+}
+
+def pushDockerImage(String imageName, String imageTag, String dockerRepoUrl) {
+    sh "docker tag ${imageName}:${imageTag} ${dockerRepoUrl}/${imageName}:${imageTag}"
+    sh "docker push ${dockerRepoUrl}/${imageName}:${imageTag}"
 }
