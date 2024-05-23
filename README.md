@@ -126,9 +126,5 @@ sudo usermod -aG docker jenkins
 #### Docker Hub Authentication
 If you receive a denied: requested access to the resource is denied error when pushing a Docker image, ensure that your Jenkins instance is properly authenticated with Docker Hub. This can be done by configuring Docker credentials in Jenkins:
 
-Go to Jenkins Dashboard.
-Navigate to Credentials > System > Global credentials.
-Add new credentials with your Docker Hub username and password.
-Use these credentials in your pipeline to login to Docker Hub before pushing the image:
 
 
