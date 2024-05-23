@@ -43,20 +43,3 @@ def call(Map config=[:]) {
         }
     }
 }
-
-def checkoutGitRepo(String repoUrl, String branch) {
-    checkout([$class: 'GitSCM', branches: [[name: branch]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: repoUrl]]])
-}
-
-def buildCode(String buildCommand) {
-    sh "${buildCommand}"
-}
-
-def buildDockerImage(String dockerfile, String imageName, String imageTag) {
-    sh "docker build -t ${imageName}:${imageTag} -f ${dockerfile} ."
-}
-
-def pushDockerImage(String imageName, String imageTag, String dockerRepoUrl) {
-    sh "docker tag ${imageName}:${imageTag} ${dockerRepoUrl}/${imageName}:${imageTag}"
-    sh "docker push ${dockerRepoUrl}/${imageName}:${imageTag}"
-}
