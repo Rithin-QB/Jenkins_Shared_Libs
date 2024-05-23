@@ -19,9 +19,7 @@ def call(Map config) {
             stage('Build') {
                 steps {
                     script {
-                        dir(config.buildDir) {
-                            buildCode(config.buildCommand)
-                        }
+                        buildCode(config.buildCommand)
                     }
                 }
             }
