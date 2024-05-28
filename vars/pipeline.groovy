@@ -5,12 +5,10 @@ def call(Map config) {
 
         environment {
             DOCKER_CREDENTIALS = credentials("${config.dockerCredentialsId ?: 'dockerhub-halkeye'}")
-            BUILD_DATE = new Date().format("yyyy-MM-dd'T'HH:mm:ssXXX")
             DOCKER_REGISTRY = "${config.dockerRepoUrl ?: ''}"
             IMAGE_NAME = "${config.imageName}"
             IMAGE_TAG = "${config.imageTag ?: 'latest'}"
             DOCKERFILE = "${config.dockerfile ?: 'Dockerfile'}"
-            SHORT_GIT_COMMIT_REV = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
         }
 
         options {
