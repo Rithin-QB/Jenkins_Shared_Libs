@@ -1,4 +1,3 @@
-// vars/pipeline.groovy
 def call(Map config) {
     pipeline {
         agent any
