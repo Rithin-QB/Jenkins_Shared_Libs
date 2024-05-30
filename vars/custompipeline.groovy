@@ -9,14 +9,6 @@ def call(Map config) {
             IMAGE_TAG = "${config.imageTag ?: 'latest'}"
             DOCKERFILE = "${config.dockerfile ?: 'Dockerfile'}"
         }
-
-        options {
-            disableConcurrentBuilds()
-            buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
-            timeout(time: 60, unit: "MINUTES")
-            ansiColor("xterm")
-        }
-
         stages {
             stage('Checkout') {
                 steps {
