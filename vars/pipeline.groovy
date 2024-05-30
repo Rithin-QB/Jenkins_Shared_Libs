@@ -1,4 +1,4 @@
-def customPipeline(Map config) {
+def call(Map config) {
     pipeline {
         agent any
 
