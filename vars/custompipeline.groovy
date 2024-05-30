@@ -40,7 +40,7 @@ def call(Map config) {
                             sh """
                                 docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
                                 docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
-                                docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
+                                docker push ${DOCKER_REGISTRY}
                             """
                         }
                     }
